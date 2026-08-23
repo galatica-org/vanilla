@@ -47,11 +47,11 @@ node scientific-calculator/javascript/calculator.js sqrt 16
 node scientific-calculator/javascript/calculator.js sin 1.5708
 ```
 
-<!-- ```typescript
+```typescript
 npx ts-node scientific-calculator/typescript/calculator.ts add 2 3
 npx ts-node scientific-calculator/typescript/calculator.ts sqrt 16
 npx ts-node scientific-calculator/typescript/calculator.ts sin 1.5708
-``` -->
+```
 
 ```go
 go run scientific-calculator/go/calculator.go add 2 3
