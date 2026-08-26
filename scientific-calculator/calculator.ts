@@ -15,6 +15,7 @@ export function calculate(op: string, a: number, b?: number): number {
   }
 }
 
+# Create an exception entry for when the op is != than the usual 4 
 function main() {
   const args = process.argv.slice(2);
   if (args.length < 2) {
