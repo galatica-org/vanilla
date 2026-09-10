@@ -1,0 +1,37 @@
+name: CI file
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    name: Test scripts in Docker
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: false
+          load: true
+          tags: app:test
+
+      - name: Run tests in parallel
+        run: |
+          docker run --rm app:test bash -c '
+            set -e
+            # Run three test scripts in parallel and wait for all
+            ( /app/scripts/test_a.sh ) &
+            ( /app/scripts/test_b.sh ) &
+            wait
+          '
