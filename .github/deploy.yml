@@ -1,0 +1,48 @@
+name: Deploy
+
+on:
+  # Daily at 02:00 UTC = 09:00 Hanoi (UTC+7)
+  schedule:
+    - cron: "0 2 * * *"
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: "Type 'yes' to confirm deployment"
+        required: true
+
+jobs:
+  deploy:
+    name: Deploy to production
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: false
+          load: true
+          tags: app:deploy
+
+      # If triggered manually, enforce confirmation
+      - name: Enforce manual confirmation (workflow_dispatch only)
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          if [ "${{ github.event.inputs.confirm }}" != "yes" ]; then
+            echo "Deployment not confirmed. Aborting."
+            exit 1
+          fi
+
+      - name: Run deploy script
+        run: |
+          docker run --rm app:deploy bash -c '
+            set -e
+            /app/scripts/deploy.sh
+          '
