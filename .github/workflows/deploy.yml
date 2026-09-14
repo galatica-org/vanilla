@@ -1,14 +1,14 @@
 name: Deploy
 
 on:
-  ## Daily at 02:00 UTC = 09:00 Hanoi (UTC+7)
-  # schedule:
-  #   - cron: "0 2 * * *"
-  # workflow_dispatch:
-  #   inputs:
-  #     confirm:
-  #       description: "Type 'yes' to confirm deployment"
-  #       required: true
+  # Daily at 02:00 UTC = 09:00 Hanoi (UTC+7)
+  schedule:
+    - cron: "0 8 * * *"
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: "Type 'yes' to confirm deployment"
+        required: true
   push:
     branches: [main]
 
